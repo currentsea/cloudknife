@@ -1,4 +1,5 @@
 #!/usr/bin/python
+# cloudtool.py - wrapper class of the python boto3 library for Amazon Web Services
 __author__ = "currentsea" 
 __maintainer__ = "currentsea" 
 __version__ = "0.0.1"
@@ -26,47 +27,10 @@ __license__ = "MIT"
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-import sys
-import os
-import boto3
-from clint.textui import puts, indent
-from clint import arguments
 
-# Check arguments to determine program execution 
-def getCreds(args, credentialsFileName="config/aws_credentials"): 
-	creds = {}
-	if (args == None): 
-		with open(credentialsFileName, "r") as credentialsFile: 
-			for line in credentialsFile: 
-				lineSplit = line.split("=") 
-				if len(lineSplit) == 2: 
-					if lineSplit[0] == "AWS_ACCESS_KEY" or lineSplit[0] == "AWS_ACCESS_SECRET": 
-						key = lineSplit[0] 
-						value = lineSplit[1]
-						creds[key] = value.strip()
-						with indent(4, quote='  ====> '):
-							puts(key + ": " + value.strip()) 
+import boto3 
 
-	else: 
-		try: 
-			creds["AWS_ACCESS_KEY"] = raw_input("AWS_ACCESS_KEY: ") 
-			creds["AWS_ACCESS_secret"] = raw_input("AWS_ACCESS_KEY: ") 
-		except: 
-			raise
-	return creds
-			
-def listS3(): 
-	s3 = boto3.client("s3") 
-	print s3.list_buckets()
+class Cloudtool(): 
 
-# Return all args passed after "cloudknife.py" - i.e. "$1, $2, $3", etc 
-def getUserArgs(): 
-	args = arguments.Args()
-	return args.get(0)
-
-if __name__ == "__main__": 
-	puts ("Welcome to cloudknife!")
-	args = getUserArgs()
-	creds = getCreds(args) 
-	print (creds)
-	listS3()
+	def __init__(self, awsKey=None, awsSecret=None): 
+		print ("Connected to cloudtool with " + awsKey)
