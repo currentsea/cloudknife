@@ -1,0 +1,17 @@
+#!/bin/bash 
+# Author: Joseph "currentsea" Bull 
+# File: cloudknife
+# License: MIT 
+# Copyright 2016 currentsea
+# If you are interested in more of my projects, feel free to visit the following sites shown below: 
+# https://btcdata.org - https://btcdream.ws - https://globalclasstrade.com -- https://btcmarket.ws
+# Command line tool for interacting with AWS resources for day to day operations of the cloud 
+
+# source .aws/credentials
+
+# Read the values to see what needs to be input 
+SEC_KEY_ID="aws_access_key_id_goes_here"
+SEC_KEY_CONTENTS="aws_access_secret_content_goes_here" 
+
+python3 src/cloudknife.py
+
