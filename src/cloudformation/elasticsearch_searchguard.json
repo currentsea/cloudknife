@@ -1,0 +1,79 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+
+    "Description" : "Launch a cloudformation stack with an ASG and an EC2 instance hooked up to an amazon load balancer.",
+    "Parameters": {
+        "DesiredInstanceCount": {
+            "Type": "String",
+            "Default": "3",
+            "Description": "Desired Instance Count"
+        },
+        "InstanceType": {
+            "Description": "EC2 instance type",
+            "Type": "String",
+            "Default": "t1.micro",
+            "AllowedValues": [ "t1.micro", "m1.small", "m1.medium", "m1.large", "m3.medium", "m3.large", "m3.2xlarge"],
+            "ConstraintDescription": "must be a valid EC2 instance type."
+        },
+        "ImageId": {
+            "Type": "String",
+            "Default": "ami-00000000",
+            "Description":"AMI to launch jenkins with"
+        },
+        "MinInstanceCount": {
+            "Type": "String",
+            "Default": "3",
+            "Description": "Minimum Instance Count"
+        },
+        "MaxInstanceCount": {
+            "Type": "String",
+            "Default": "3",
+            "Description": "Maximum Instance Count"
+        },
+        "elasticsearch": {
+            "Description": "Name of an existing EC2 KeyPair to enable SSH access to the instances",
+            "Type": "AWS::EC2::KeyPair::KeyName",
+            "Default": "elasticsearch.pem",
+            "ConstraintDescription" : "must be the name of an existing EC2 KeyPair."
+        }, 
+        "elasticsearchASGSecurityGroup": { 
+            "Description" : "SG For Sec", 
+            "Type": "String", 
+            "Default": "sg-33333333"
+        }, 
+        "TargetLoadBalancer": { 
+            "Description" : "LB the instances will get attached to", 
+            "Type": "String", 
+            "Default": "es-prod-staging-lb"
+        }
+    },
+
+    "Resources" : {
+        "DeploymentHarmonyConfiguration": {
+            "Type": "AWS::AutoScaling::LaunchConfiguration",
+            "Properties": {
+                "ImageId": {
+                    "Ref": "ImageId"
+                },
+                "InstanceType": { "Ref": "InstanceType" },
+                "KeyName": { "Ref": "elasticsearch" },
+                "IamInstanceProfile": "merkba-currentsea",
+                "SecurityGroups": [ { "Ref": "elasticsearchASGSecurityGroup" } ]
+            }
+        },
+        "HarmoniousScalability": {
+            "Type": "AWS::AutoScaling::AutoScalingGroup",
+            "Properties": {
+                "AvailabilityZones": [ "us-west-2b" ],
+                "Cooldown": "600",
+                "DesiredCapacity": { "Ref": "DesiredInstanceCount" },
+                "LaunchConfigurationName": { "Ref": "DeploymentHarmonyConfiguration" },
+                "MaxSize": { "Ref": "MaxInstanceCount" },
+                "MinSize": { "Ref": "MinInstanceCount" }, 
+                "LoadBalancerNames": [ { "Ref": "TargetLoadBalancer" } ]
+            }
+        }
+    }
+}
+
+
