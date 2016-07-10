@@ -32,6 +32,8 @@ import boto3
 from clint.textui import puts, indent
 from clint import arguments
 
+DEFAULT_REGION = "us-west-2" 
+
 # Check arguments to determine program execution 
 def getCreds(args, credentialsFileName="config/aws_credentials"): 
 	creds = {}
@@ -55,18 +57,34 @@ def getCreds(args, credentialsFileName="config/aws_credentials"):
 			raise
 	return creds
 			
-def listS3(): 
-	s3 = boto3.client("s3") 
-	print s3.list_buckets()
+def getS3BucketList(region=DEFAULT_REGION): 
+	s3 = boto3.client("s3", region_name=region) 
+	bucketNameList = []
+	for bucket in s3.list_buckets()["Buckets"]: 
+		bucketNameList.append(bucket["Name"])
+	return bucketNameList
 
 # Return all args passed after "cloudknife.py" - i.e. "$1, $2, $3", etc 
 def getUserArgs(): 
-	args = arguments.Args()
-	return args.get(0)
+	return arguments.Args()
+
+def printS3BucketNames(region=DEFAULT_REGION): 
+	print ("BELOW ARE THE AVAILABLE S3 BUCKETS IN THE REGION: " + region)
+	bucketNameList = getS3BucketList(region)
+	for name in bucketNameList: 
+		with indent(4, quote='--> '):
+			puts(name)
+
+
+def processArgs(args): 
+	firstArg = args.get(0) 
+	if firstArg == None:
+		raise IOError("No arguments passed to application.  Please use the \"--help\" flag for help")
+	elif firstArg == "get-bucket-names": 
+		printS3BucketNames()
 
 if __name__ == "__main__": 
 	puts ("Welcome to cloudknife!")
 	args = getUserArgs()
-	creds = getCreds(args) 
-	print (creds)
-	listS3()
+	processArgs(args) 
+	# bucketList = getS3BucketList()

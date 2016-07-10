@@ -1,0 +1,43 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": [
+          "arn:aws:iam::397838521661:role/merkba-currentsea"
+        ]
+      },
+      "Action": [
+        "es:*"
+      ],
+      "Resource": "arn:aws:es:us-west-2:397838521661:domain/btc-staging-temp/*"
+    }, 
+    {
+      "Sid": "",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "*"
+      },
+      "Action": "es:*",
+      "Condition": {
+        "IpAddress": {
+          "aws:SourceIp": [
+            "52.11.218.14",
+            "52.36.145.242",
+            "52.33.106.254",
+            "52.27.12.219",
+            "52.27.58.116",
+            "52.11.184.7",
+            "52.34.137.56",
+            "52.36.97.141",
+            "52.36.244.42",
+            "52.35.22.230",
+            "73.25.10.90/32"
+          ]
+        }
+      },
+      "Resource": "arn:aws:es:us-west-2:397838521661:domain/btc-staging-temp/*"
+    }
+  ]
+}
