@@ -25,16 +25,11 @@ To use the application, simply utilize the following command (the `cloudknife` f
 # REPOSITORY_ROOT implies the root of this repo 
 cd ${REPOSITORY_ROOT} 
 ./cloudknife 
-
-# Will give you a list of the s3 bucket names at the root of the region (just a simple list of the available buckets, nothing more)
-./cloudknife get-bucket-names 
-
-# example output for call to ./cloudknife get-bucket-names is shown below 
-bucket1
-bucket2
-etc 
-# end example output for get-bucket-names call 
 ```
+
+# Commands 
+Run the following commands with `./cloudknife <COMMAND>` as shown below
+* `get-bucket-names` - will get you a list of all the bucket names in a given region (default is us-west-2, currently no support for others, will support later hopefully)
 
 # Contributing 
 * This is an open source project developed by myself on my own time using my own resources.  If you make an improvement to the tool, i kindly ask that you open up a pull request back into the repository so that i can incorporate your changes.  I value nothing more than open collaboration and communicationin a software project. 

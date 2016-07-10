@@ -82,6 +82,10 @@ def processArgs(args):
 		raise IOError("No arguments passed to application.  Please use the \"--help\" flag for help")
 	elif firstArg == "get-bucket-names": 
 		printS3BucketNames()
+	elif firstArg == "get-ip": 
+		raise IOError("not yet implemented") 
+	elif firstArg == "get-private-ip": 
+		raise IOError("not yet implemented") 
 
 if __name__ == "__main__": 
 	puts ("Welcome to cloudknife!")
